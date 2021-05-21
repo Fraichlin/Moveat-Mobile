@@ -17,8 +17,9 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
 
-package com.mycompany.myapp.gui.security;
+package com.mycompany.myapp.gui.member;
 
+import com.mycompany.myapp.gui.security.*;
 import com.codename1.components.ToastBar;
 import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
@@ -28,6 +29,8 @@ import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.entities.Member;
+import com.mycompany.myapp.entities.User;
 
 /**
  * Common code that can setup the side menu
@@ -51,22 +54,23 @@ public abstract class SideMenuBaseForm extends Form {
         super(contentPaneLayout);
     }
     
-    public void setupSideMenu(Resources res) {
+    public void setupSideMenu(Resources res,Member user) {
         Image profilePic = res.getImage("user-picture.jpg");
         Image mask = res.getImage("round-mask.png");
         mask = mask.scaledHeight(mask.getHeight() / 4 * 3);
         profilePic = profilePic.fill(mask.getWidth(), mask.getHeight());
-        Label profilePicLabel = new Label("  Jennifer Wilson", profilePic, "SideMenuTitle");
+        Label profilePicLabel = new Label(user.getNom()+" "+user.getPrenom(), profilePic, "SideMenuTitle");
         profilePicLabel.setMask(mask.createMask());
 
         Container sidemenuTop = BorderLayout.center(profilePicLabel);
         sidemenuTop.setUIID("SidemenuTop");
         
         getToolbar().addComponentToSideMenu(sidemenuTop);
-        getToolbar().addMaterialCommandToSideMenu("  Dashboard", FontImage.MATERIAL_DASHBOARD,  e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Activity", FontImage.MATERIAL_TRENDING_UP,  e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Tasks", FontImage.MATERIAL_ACCESS_TIME,  e -> showOtherForm(res));
-        getToolbar().addMaterialCommandToSideMenu("  Account Settings", FontImage.MATERIAL_SETTINGS,  e -> showOtherForm(res));
+        getToolbar().addMaterialCommandToSideMenu("  Tableau de bord", FontImage.MATERIAL_DASHBOARD,  e -> new HomeMember(res,user).show());
+        getToolbar().addMaterialCommandToSideMenu("  Nutrition", FontImage.MATERIAL_BREAKFAST_DINING,  e -> showOtherForm(res));
+        getToolbar().addMaterialCommandToSideMenu("  Psychothérapie", FontImage.MATERIAL_PSYCHOLOGY,  e -> showOtherForm(res));
+        getToolbar().addMaterialCommandToSideMenu("  Sport", FontImage.MATERIAL_SPORTS,  e -> showOtherForm(res));
+        getToolbar().addMaterialCommandToSideMenu("  Modifier Profil", FontImage.MATERIAL_SETTINGS,  e -> new profilMemberView(res,user).show());
         getToolbar().addMaterialCommandToSideMenu("  Logout", FontImage.MATERIAL_EXIT_TO_APP,  e -> new LoginForm(res).show());
     }
     

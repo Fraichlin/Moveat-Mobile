@@ -27,13 +27,14 @@ import com.codename1.ui.Display;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.ImageIO;
 import com.mycompany.myapp.entities.Member;
-import com.mycompany.myapp.gui.IndexView;
 import com.mycompany.myapp.services.member.registerMemberService;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,9 +53,24 @@ import java.util.Date;
 public class registerMemberView extends Form{
 
     public registerMemberView(Form previous) {
-        setTitle("Inscription Membre");
-        setLayout(BoxLayout.y());
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e->previous.show());
+        
+        Toolbar tb = getToolbar();
+        tb.setTitleCentered(false);
+
+        Button menuButton = new Button("");
+        menuButton.setUIID("Title");
+        FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_ARROW_BACK);
+        menuButton.addActionListener(e->previous.show());
+        Container titleCmp = BoxLayout.encloseY(
+                        FlowLayout.encloseIn(menuButton),
+                        BorderLayout.centerAbsolute(
+                                BoxLayout.encloseY(
+                                    new Label("Inscription Membre", "WelcomeWhite")
+                                )
+                            )
+                );
+      
+        tb.setTitleComponent(titleCmp);  
     
         TextField tName = new TextField("", "Nom");
         TextField tSurname = new TextField("", "Prénom");

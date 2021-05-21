@@ -13,8 +13,9 @@ import com.codename1.ui.Toolbar;
 import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.io.NetworkEvent;
-import com.mycompany.myapp.gui.IndexView;
+import com.mycompany.myapp.gui.member.HomeMember;
 import com.mycompany.myapp.gui.security.LoginForm;
+import com.mycompany.myapp.gui.security.WalkthruForm;
 
 
 /**
@@ -50,7 +51,7 @@ public class MyApplication {
     }
     
     public void start() {
-      new IndexView().show();
+      new WalkthruForm(theme).show();
     }
 
     public void stop() {

@@ -17,8 +17,9 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
 
-package com.mycompany.myapp.gui.security;
+package com.mycompany.myapp.gui.member;
 
+import com.mycompany.myapp.gui.security.*;
 import com.codename1.components.FloatingActionButton;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
@@ -34,14 +35,16 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.entities.Member;
+import com.mycompany.myapp.entities.User;
 
 /**
  * Represents a user profile in the app, the first form we open after the walkthru
  *
  * @author Shai Almog
  */
-public class ProfileForm extends SideMenuBaseForm {
-    public ProfileForm(Resources res) {
+public class HomeMember extends SideMenuBaseForm {
+    public HomeMember(Resources res,Member user) {
         super(BoxLayout.y());
         Toolbar tb = getToolbar();
         tb.setTitleCentered(false);
@@ -56,42 +59,19 @@ public class ProfileForm extends SideMenuBaseForm {
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
         menuButton.addActionListener(e -> getToolbar().openSideMenu());
         
-        Container remainingTasks = BoxLayout.encloseY(
-                        new Label("12", "CenterTitle"),
-                        new Label("remaining tasks", "CenterSubTitle")
-                );
-        remainingTasks.setUIID("RemainingTasks");
-        Container completedTasks = BoxLayout.encloseY(
-                        new Label("32", "CenterTitle"),
-                        new Label("completed tasks", "CenterSubTitle")
-        );
-        completedTasks.setUIID("CompletedTasks");
-
         Container titleCmp = BoxLayout.encloseY(
                         FlowLayout.encloseIn(menuButton),
                         BorderLayout.centerAbsolute(
                                 BoxLayout.encloseY(
-                                    new Label("Jennifer Wilson", "Title"),
-                                    new Label("UI/UX Designer", "SubTitle")
+                                    new Label("Bienvenue !!", "WelcomeWhite"),
+                                    new Label(user.getUsername(), "SubTitle")
                                 )
-                            ).add(BorderLayout.WEST, profilePicLabel),
-                        GridLayout.encloseIn(2, remainingTasks, completedTasks)
+                            ).add(BorderLayout.WEST, profilePicLabel)
                 );
-        
-        FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
-        fab.getAllStyles().setMarginUnit(Style.UNIT_TYPE_PIXELS);
-        fab.getAllStyles().setMargin(BOTTOM, completedTasks.getPreferredH() - fab.getPreferredH() / 2);
-        tb.setTitleComponent(fab.bindFabToContainer(titleCmp, CENTER, BOTTOM));
-                        
-        add(new Label("Today", "TodayTitle"));
-        
-        FontImage arrowDown = FontImage.createMaterial(FontImage.MATERIAL_KEYBOARD_ARROW_DOWN, "Label", 3);
-        
-        addButtonBottom(arrowDown, "Finish landing page concept", 0xd997f1, true);
-        addButtonBottom(arrowDown, "Design app illustrations", 0x5ae29d, false);
-        addButtonBottom(arrowDown, "Javascript training ", 0x4dc2ff, false);
-        addButtonBottom(arrowDown, "Surprise Party for Matt", 0xffc06f, false);
-        setupSideMenu(res);
+      
+        tb.setTitleComponent(titleCmp);                                
+       
+        setupSideMenu(res,user);
     }
     
     private void addButtonBottom(Image arrowDown, String text, int color, boolean first) {
@@ -122,6 +102,5 @@ public class ProfileForm extends SideMenuBaseForm {
 
     @Override
     protected void showOtherForm(Resources res) {
-        new StatsForm(res).show();
     }
 }

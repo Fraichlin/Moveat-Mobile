@@ -39,7 +39,21 @@ public class registerMemberService {
             @Override
             public void actionPerformed(NetworkEvent evt) {
                 result = req.getResponseCode()==200;
-                System.out.println("dksjhdksh");
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return result;
+    }
+    
+    public boolean updateMember(Member m){
+        String url = Statics.URL+"/updateMember?nom="+m.getNom()+"&prenom="+m.getPrenom()+"&email="+m.getEmail()+"&password="+
+                m.getPassword()+"&username="+m.getUsername()+"&taille="+m.getTaille()+"&poids="+m.getPoids()+"&photo="+
+                m.getPhoto();
+        req.setUrl(url);
+        req.addResponseListener(new ActionListener<NetworkEvent>(){
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                result = req.getResponseCode()==200;
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(req);

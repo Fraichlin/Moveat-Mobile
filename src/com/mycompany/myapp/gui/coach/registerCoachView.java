@@ -16,15 +16,25 @@ import com.codename1.ui.Button;
 import com.codename1.ui.CN;
 import com.codename1.ui.CheckBox;
 import com.codename1.ui.ComboBox;
+import com.codename1.ui.Command;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
+import com.codename1.ui.Toolbar;
 import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.util.ImageIO;
+import com.mycompany.myapp.entities.Coach;
+import com.mycompany.myapp.entities.Member;
+import com.mycompany.myapp.services.coach.registerCoachService;
+import com.mycompany.myapp.services.member.registerMemberService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,14 +50,23 @@ import java.util.Date;
 public class registerCoachView extends Form{
 
     public registerCoachView(Form previous) {
-        setTitle("Inscription Coach");
-        setLayout(BoxLayout.y());
-        
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e->previous.show());
-        
-        setTitle("Inscription Membre");
-        setLayout(BoxLayout.y());
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e->previous.show());
+        Toolbar tb = getToolbar();
+        tb.setTitleCentered(false);
+
+        Button menuButton = new Button("");
+        menuButton.setUIID("Title");
+        FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_ARROW_BACK);
+        menuButton.addActionListener(e->previous.show());
+        Container titleCmp = BoxLayout.encloseY(
+                        FlowLayout.encloseIn(menuButton),
+                        BorderLayout.centerAbsolute(
+                                BoxLayout.encloseY(
+                                    new Label("Inscription Coach", "WelcomeWhite")
+                                )
+                            )
+                );
+      
+        tb.setTitleComponent(titleCmp);  
     
         TextField tName = new TextField("", "Nom");
         TextField tSurname = new TextField("", "Prénom");
@@ -65,8 +84,8 @@ public class registerCoachView extends Form{
         cbSp.addItem("Coach Sportif");
 
         
-        TextField tTaille = new TextField("","Adresse*",15,TextField.NUMERIC);
-        TextField tPoids = new TextField("","Téléphone*",15,TextField.NUMERIC);
+        TextField tAdresse = new TextField("","Adresse*");
+        TextField tTel = new TextField("","Téléphone*");
         Button btnImage = new Button("Choisir photo de profil");
         Button btnFile = new Button("Choisir fichier justificatif");
         Label lbImage = new Label();
@@ -77,7 +96,7 @@ public class registerCoachView extends Form{
         profilfile.add(btnFile);
          
                 
-        addAll(tName,tSurname,tEmail,tUsername,tPassword,tConfirmPassword,cbSexe,cbSp,tTaille,tPoids,profilPicture,profilfile);
+        addAll(tName,tSurname,tEmail,tUsername,tPassword,tConfirmPassword,cbSexe,cbSp,tAdresse,tTel,profilPicture,profilfile);
         
         
         CheckBox multiSelect = new CheckBox("Multi-select");    
@@ -208,6 +227,43 @@ public class registerCoachView extends Form{
                 });
             }
         });
+        
+        
+        Button btnRegister = new Button("Enregistrer");
+         btnRegister.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                if(tEmail.getText().equals("")
+                        ||tUsername.getText().equals("")||tPassword.getText().equals("")||
+                        tConfirmPassword.getText().equals("")||tAdresse.getText().equals("")||
+                        tTel.getText().equals(""))
+                    Dialog.show("Alert","veuillez remplir tous les champs avec un *",new Command("ok"));
+                else{
+                    try{
+                        Coach m = new Coach();
+                        m.setNom(tName.getText());
+                        m.setPrenom(tSurname.getText());
+                        m.setEmail(tEmail.getText());
+                        m.setUsername(tUsername.getText());
+                        m.setPassword(tPassword.getText());
+                        m.setSexe(cbSexe.getSelectedItem().toString());
+                        m.setAdresse(tAdresse.getText());
+                        m.setSpecialite(cbSp.getSelectedItem().toString());
+                        m.setTel(tTel.getText());
+                        m.setPhoto(UUID+".png");
+                        if(new registerCoachService().registerCoach(m))
+                            Dialog.show("Success", "Inscription réussie", new Command("OK"));
+                        else
+                            Dialog.show("Error", "Echec de l'inscription", new Command("OK"));
+                    }catch(Exception e){
+                        Dialog.show("Error", "erreur inconnue !",new Command("OK"));
+                    }
+                }
+                
+            }
+            
+        });
+        add(btnRegister);
     }
     protected String saveFileToDevice(String hi, String ext) throws IOException {
         URI uri;
