@@ -5,8 +5,8 @@
     To learn more about Codename One go to https://www.codenameone.com/
     -->
         
-    <project name="moveatMobile" default="default" basedir=".">
-    <description>Builds, tests, and runs the project moveatMobile.</description>
+    <project name="workshop" default="default" basedir=".">
+    <description>Builds, tests, and runs the project workshop.</description>
     <import file="nbproject/build-impl.xml"/>
     <property file="codenameone_settings.properties"/>
     <property name="automated" value="false" />

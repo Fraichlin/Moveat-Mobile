@@ -7,8 +7,9 @@ package com.mycompany.myapp.utils;
 
 /**
  *
- * @author NGONGANG Loic F
+ * @author bhk
  */
 public class Statics {
-    public static final String URL = "http://127.0.0.1:8000/Api";
+    public static final String BASE_URL="http://localhost:8000";
+    
 }
