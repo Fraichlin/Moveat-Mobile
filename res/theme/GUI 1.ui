@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="GUI 1" cloudDestinationProperty="GUI 1" >
+  <component type="Container" name="Container" cloudDestinationProperty="Container" >
+    <component type="Button" name="Button" cloudDestinationProperty="Button" text="Button" >
+    </component>
+  </component>
+  <component type="WebBrowser" name="WebBrowser" cloudDestinationProperty="WebBrowser" >
+    <custom name="url" type="java.lang.String" value="https://google.com" />
+    <custom name="html" type="java.lang.String" value="" />
+  </component>
+</component>
